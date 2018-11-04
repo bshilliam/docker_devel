@@ -16,7 +16,11 @@ RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 
 WORKDIR /home/user
+ENV homedir /home/user
 
-RUN /home/user/.rbenv/bin/rbenv install 2.5.3
-RUN /home/user/.rbenv/bin/rbenv rehash
-RUN /home/user/.rbenv/bin/rbenv global 2.5.3
+RUN $homedir/.rbenv/bin/rbenv install 2.5.3
+RUN $homedir/.rbenv/bin/rbenv rehash
+RUN $homedir/.rbenv/bin/rbenv global 2.5.3
+
+RUN $homedir/.rbenv/shims/gem update --system
+RUN $homedir/.rbenv/shims/gem install rails --no-ri --no-rdoc
