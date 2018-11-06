@@ -1,6 +1,10 @@
+#build devel image
+docker build --rm --tag devel:latest .
+
 #start a mysql container
 docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d mysql
 
+#with authentication that works in Docker
 docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d --entrypoint 'usr/local/bin/docker-entrypoint.sh' mysql --default-authentication-plugin=mysql_native_password
 
 #start a development container linked to the db container
