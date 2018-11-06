@@ -24,3 +24,15 @@ RUN $homedir/.rbenv/bin/rbenv global 2.5.3
 
 RUN $homedir/.rbenv/shims/gem update --system
 RUN $homedir/.rbenv/shims/gem install rails --no-ri --no-rdoc
+
+RUN mkdir $homedir/Sites
+
+USER root
+
+RUN yum -y install sqlite-devel
+RUN yum -y install mysql-devel
+RUN yum -y install mysql
+RUN yum -y install epel-release
+RUN yum -y install nodejs
+
+USER user
