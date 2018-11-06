@@ -16,7 +16,12 @@ cd ~/Sites && rails new demo_project -d mysql && rbenv local 2.5.3
 #configure db username,password,host
 vi ~/Sites/config/database.yaml
 
-#test db connection, this should dump a file to ~/Sites/db/schema.rb
+#username: rails_user
+#password: password
+#host: 172.17.0.2
+
+#test db connection, this should dump a file to ~/Sites/demo_project/db/schema.rb
+cd ~/Sites/demo_project
 rails db:schema:dump
 
 #start a container to run mysql against the db in the db container
@@ -34,4 +39,3 @@ create database demo_project_test;
 create user 'rails_user' identified by 'password';
 grant all privileges on demo_project_development.* to 'rails_user';
 grant all privileges on demo_project_test.* to 'rails_user';
-
