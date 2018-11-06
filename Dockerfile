@@ -1,38 +1,44 @@
 FROM centos:7
 
-RUN yum -y update && yum -y upgrade && yum clean all
-RUN yum -y groupinstall 'Development Tools'
-RUN yum -y install ruby which openssl-devel readline-devel zlib-devel
+ENV homedir=/home/user \
+    project_name=demo_project \
+    username=user \
+    group=users
 
-RUN useradd -m user -p user && usermod -a -G users user
+RUN useradd -m $username -p $username && usermod -a -G $group $username
 
-USER user
+RUN set -x \
+      && yum -y update && yum -y upgrade && yum clean all \
+      && yum -y groupinstall 'Development Tools' \
+      && yum -y install ruby which openssl-devel readline-devel zlib-devel sqlite-devel mysql-devel mysql epel-release \
+      && yum -y install nodejs
 
-RUN echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-RUN echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+USER $username
 
-RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+RUN set -x \
+      && echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc \
+      && echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 
-RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+RUN set -x \
+      && git clone https://github.com/rbenv/rbenv.git ~/.rbenv \
+      && git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 
-WORKDIR /home/user
-ENV homedir /home/user
+RUN set -x \
+      && $homedir/.rbenv/bin/rbenv install 2.5.3 \
+      && $homedir/.rbenv/bin/rbenv rehash \
+      && $homedir/.rbenv/bin/rbenv global 2.5.3
 
-RUN $homedir/.rbenv/bin/rbenv install 2.5.3
-RUN $homedir/.rbenv/bin/rbenv rehash
-RUN $homedir/.rbenv/bin/rbenv global 2.5.3
-
-RUN $homedir/.rbenv/shims/gem update --system
-RUN $homedir/.rbenv/shims/gem install rails --no-ri --no-rdoc
+RUN set -x \
+      && $homedir/.rbenv/shims/gem update --system \
+      && $homedir/.rbenv/shims/gem install rails --no-ri --no-rdoc
 
 RUN mkdir $homedir/Sites
 
-USER root
+RUN set -x \
+      && cd $homedir/Sites \
+      && $homedir/.rbenv/shims/rails new $project_name -d mysql \
+      && $homedir/.rbenv/bin/rbenv local 2.5.3
 
-RUN yum -y install sqlite-devel
-RUN yum -y install mysql-devel
-RUN yum -y install mysql
-RUN yum -y install epel-release
-RUN yum -y install nodejs
+COPY --chown=user:users database.yml $homedir/Sites/$project_name/config
 
-USER user
+WORKDIR $homedir
