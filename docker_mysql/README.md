@@ -1,6 +1,6 @@
 # Some helpful commands
 
-## build devel image from this Dockerfile
+## build devel_mysql image from this Dockerfile
 docker build --rm --tag devel_mysql:latest .
 
 ## run db
