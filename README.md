@@ -38,11 +38,11 @@ cd ~/Sites && rails new demo_project -d mysql && rbenv local 2.5.3
 ## configure db username,password,host
 ```
 vi ~/Sites/demo_project/config/database.yml
-```
 
->username: rails_user
->password: password
->host: 172.17.0.2
+username: rails_user
+password: password
+host: 172.17.0.2
+```
 
 ## test db connection, this should dump a file to ~/Sites/demo_project/db/schema.rb
 ```
