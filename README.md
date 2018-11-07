@@ -24,9 +24,11 @@ docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d devel_mysql
 docker build --rm --tag devel:latest .
 ```
 
-5. run development container linked to the db container
+5. run development container linked to the db container and create databases
 ```
 docker run -ti -p 3000:3000 --name devel-app --link devel-db:mysql --rm devel bash
+cd ~/Sites/demo_project
+rake db:create
 ```
 
 ## Other helpful commands
@@ -40,12 +42,6 @@ mysql -u root -p -h $MYSQL_PORT_3306_TCP_ADDR
 ```
 cd ~/Sites/demo_project
 rails db:schema:dump
-```
-
-### create databases for rails project
-```
-cd ~/Sites/demo_project
-rake db:create
 ```
 
 ### start rails project
