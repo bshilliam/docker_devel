@@ -52,6 +52,7 @@ rails db:schema:dump
 ```
 cd ~/Sites/demo_project
 rails server
+
 ```
 
 ### start a container to run mysql commands against the db in the db container
