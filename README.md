@@ -1,3 +1,5 @@
+*some helpful commands
+
 #build devel image
 docker build --rm --tag devel:latest .
 
@@ -9,6 +11,7 @@ docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d --entrypoint 'usr/loca
 
 #start a development container linked to the db container
 docker run -ti -p 3000:3000 --name devel-app --link devel-db:mysql --rm devel bash
+
 
 #login to the db and create stuff
 mysql -u root -p -h $MYSQL_PORT_3306_TCP_ADDR
