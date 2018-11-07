@@ -1,68 +1,59 @@
-# Some helpful commands
+# Instructions
 
-## build devel image to develop and run on rails
+## Steps
+
+1. build devel_centos image
+```
+docker build --rm --tag devel_centos:latest docker_centos/.
+```
+
+2. build devel_mysql image
+
+```
+docker build --rm --tag devel_mysql:latest docker_mysql/.
+```
+- Note: The devel_mysql image is vanilla mysql with `default-authentication-plugin=mysql_native_password` and some create user sql commands. See the files in `./docker_mysql/mysql_config`
+
+3. run devel_mysql container
+```
+docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d devel_mysql
+```
+
+4. build devel image to develop and run on rails
 ```
 docker build --rm --tag devel:latest .
 ```
 
-## start a mysql container from custom devel_mysql image
-```
-docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d devel_mysql
-```
-See [docker_mysql](https://github.com/bshilliam/docker_mysql)
-
-## with authentication that works in Docker
-```
-docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d --entrypoint 'usr/local/bin/docker-entrypoint.sh' mysql --default-authentication-plugin=mysql_native_password
-```
-
-## start a development container linked to the db container
+5. run development container linked to the db container
 ```
 docker run -ti -p 3000:3000 --name devel-app --link devel-db:mysql --rm devel bash
 ```
 
-## login to the db and create stuff
+## Other helpful commands
+
+### login to the db from the devel container
 ```
 mysql -u root -p -h $MYSQL_PORT_3306_TCP_ADDR
-create database demo_project_development;
-create database demo_project_test;
-create user rails_user identified by 'password';
-grant all privileges on demo_project_development.* to rails_user;
-grant all privileges on demo_project_test.* to rails_user;
 ```
 
-## commands to start a new project
-```
-cd ~/Sites && rails new demo_project -d mysql && rbenv local 2.5.3
-```
-
-## configure db username,password,host
-```
-vi ~/Sites/demo_project/config/database.yml
-
-username: rails_user
-password: password
-host: 172.17.0.2
-```
-
-## test db connection, this should dump a file to ~/Sites/demo_project/db/schema.rb
+### test db connection from devel container, this should dump a file to ~/Sites/demo_project/db/schema.rb
 ```
 cd ~/Sites/demo_project
 rails db:schema:dump
+```
+
+### start rails project
+```
+cd ~/Sites/demo_project
 rails server
 ```
 
-## start a container to run mysql against the db in the db container
+### start a container to run mysql commands against the db in the db container
 ```
-docker run -it --link devel-db:mysql --rm mysql sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"'
-```
-
-## start a dummy shell container to check env variables that come with a --link
-```
-docker run -it --link devel-db:mysql --rm mysql bash
+docker run -it --link devel-db:mysql --rm devel_mysql sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"'
 ```
 
-## login to the db container
+### login to the db container to check logs etc
 ```
 docker exec -it devel-db bash
 ```
