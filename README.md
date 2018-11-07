@@ -42,6 +42,12 @@ cd ~/Sites/demo_project
 rails db:schema:dump
 ```
 
+### create databases for rails project
+```
+cd ~/Sites/demo_project
+rake db:create
+```
+
 ### start rails project
 ```
 cd ~/Sites/demo_project
