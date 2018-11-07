@@ -19,7 +19,7 @@ docker build --rm --tag devel_mysql:latest docker_mysql/.
 docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d devel_mysql
 ```
 
-4. build devel image to develop and run on rails
+4. build devel image to develop and run on rails (this will take a while)
 ```
 docker build --rm --tag devel:latest .
 ```
