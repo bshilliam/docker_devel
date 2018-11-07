@@ -42,8 +42,8 @@ RUN set -x \
 
 COPY --chown=user:users database.yml $homedir/Sites/$project_name/config
 
-RUN set -x \
-      && cd $homedir/Sites/$project_name \
-      && $homedir/.rbenv/shims/rake db:create
+#RUN set -x \
+#      && cd $homedir/Sites/$project_name \
+#      && $homedir/.rbenv/shims/rake db:create
 
 WORKDIR $homedir
