@@ -9,7 +9,7 @@ docker build --rm --tag devel:latest .
 ```
 docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d devel_mysql
 ```
-See [docker_mysql] (https://github.com/bshilliam/docker_mysql)
+See [docker_mysql](https://github.com/bshilliam/docker_mysql)
 
 ## with authentication that works in Docker
 ```
