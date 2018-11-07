@@ -1,14 +1,15 @@
 # Some helpful commands
 
-## build devel image
+## build devel image to develop and run on rails
 ```
 docker build --rm --tag devel:latest .
 ```
 
-## start a mysql container
+## start a mysql container from custom devel_mysql image
 ```
-docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d mysql
+docker run --name devel-db -e MYSQL_ROOT_PASSWORD=root -d devel_mysql
 ```
+See [docker_mysql] (https://github.com/bshilliam/docker_mysql)
 
 ## with authentication that works in Docker
 ```
