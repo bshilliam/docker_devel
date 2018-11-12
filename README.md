@@ -6,7 +6,7 @@
 ```
 docker-compose up --build
 ```
--Note: This will start build a db and app docker image and start up a container for each
+-Note: This will build a db and app docker image and start up a container for each
 
 2. create databases for the rails project (in another terminal)
 ```
