@@ -1,4 +1,10 @@
-FROM devel_centos:latest
+FROM centos:7
+
+RUN set -x \
+      && yum -y update && yum -y upgrade && yum clean all \
+      && yum -y groupinstall 'Development Tools' \
+      && yum -y install ruby which openssl-devel openssl readline-devel zlib-devel sqlite-devel mysql-devel mysql epel-release \
+      && yum -y install nodejs
 
 ENV homedir=/home/user \
     project_name=demo_project \
@@ -8,7 +14,7 @@ ENV homedir=/home/user \
     rbenv_hash=59785f6762e9325982584cdab1a4c988ed062020 \
     rubybuild_hash=abb1599b74a6cb68ce27bb9592f5fd2d57ec91ed
 
-RUN useradd -m $username -p $(echo "$username" | openssl passwd -1 -stdin) && usermod -a -G $group $username && passwd -e $username 
+RUN useradd -m $username -p $(echo "$username" | openssl passwd -1 -stdin) && usermod -a -G $group $username && passwd -e $username
 
 USER $username
 
@@ -46,4 +52,4 @@ COPY --chown=user:users database.yml $homedir/Sites/$project_name/config
 #      && cd $homedir/Sites/$project_name \
 #      && $homedir/.rbenv/shims/rake db:create
 
-WORKDIR $homedir
+WORKDIR $homedir/Sites/demo_project
