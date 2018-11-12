@@ -8,7 +8,7 @@ ENV homedir=/home/user \
     rbenv_hash=59785f6762e9325982584cdab1a4c988ed062020 \
     rubybuild_hash=abb1599b74a6cb68ce27bb9592f5fd2d57ec91ed
 
-RUN useradd -m $username -p $username && usermod -a -G $group $username
+RUN useradd -m $username -p $(echo "$username" | openssl passwd -1 -stdin) && usermod -a -G $group $username && passwd -e $username 
 
 USER $username
 
